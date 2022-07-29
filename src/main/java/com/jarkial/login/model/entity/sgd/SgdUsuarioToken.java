@@ -1,11 +1,8 @@
-package com.jarkial.login.model.sgd;
+package com.jarkial.login.model.entity.sgd;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,10 +13,8 @@ public class SgdUsuarioToken {
 
     @Id
     @Column(name = "sgd_usu_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdUsuarioGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdSgdUsuarioGenerator", sequenceName = "sgd_usu_id_seq")
     @Getter @Setter
-    private Long sgdUsuarioId;
+    private String sgdUsuarioId;
 
     @Column(name = "sgd_usu_clave")
     @Getter @Setter

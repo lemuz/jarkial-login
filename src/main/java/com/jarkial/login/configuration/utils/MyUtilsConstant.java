@@ -10,5 +10,7 @@ public class MyUtilsConstant {
     public static final Logger logger = LoggerFactory.getLogger(MyUtilsConstant.class);
 
     public static final SimpleDateFormat dateFormatAsYYYYMMDDHHMMSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static final SimpleDateFormat dateFormatAsYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
     
 }

@@ -15,8 +15,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
+/*
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
+ */
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;

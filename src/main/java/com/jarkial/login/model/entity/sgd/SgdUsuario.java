@@ -1,4 +1,4 @@
-package com.jarkial.login.model.sgd;
+package com.jarkial.login.model.entity.sgd;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.jarkial.login.model.entity.ctg.CtgAgencia;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import com.jarkial.login.model.ctg.CtgAgencia;
 
 @Entity
 @Table(name = "SGD_USUARIO")

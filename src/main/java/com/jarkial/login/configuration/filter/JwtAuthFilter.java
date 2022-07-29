@@ -11,20 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.jarkial.login.configuration.security.SgdUsuarioDetailsServiceImpl;
+import com.jarkial.login.configuration.utils.JwtTokenUtils;
+import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
+import com.jarkial.login.repositories.sgd.SgdUsuarioTokenRepository;
+
 @Component
 public class JwtAuthFilter  extends OncePerRequestFilter{
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    JwtTokenUtils jwtTokenUtil;
 
     @Autowired
-    SgdUsua
+    SgdUsuarioTokenRepository sgdUsuarioTokenRepository;
+
+    @Autowired
+    SgdUsuarioDetailsServiceImpl sgdUsuarioDetailsServiceImpl;
+
+    private static final String variableResponse = "responseDTO";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        
-    }
-    
+        //
+        filterChain.doFilter(request, response);
+    }   
 }

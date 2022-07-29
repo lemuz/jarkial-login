@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jarkial.login.model.sgd.SgdUsuarioToken;
+import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
 import com.jarkial.login.repositories.sgd.SgdUsuarioTokenRepository;
 import com.jarkial.login.services.AbstractBaseServiceImpl;
 
 @Service
 @Transactional
-public class SgdUsuarioTokenServiceImpl extends AbstractBaseServiceImpl<SgdUsuarioToken, Long>{
+public class SgdUsuarioTokenServiceImpl extends AbstractBaseServiceImpl implements SgdUsuarioTokenService{
 
     @Autowired
     SgdUsuarioTokenRepository sgdUsuarioTokenRepository;
@@ -39,9 +39,14 @@ public class SgdUsuarioTokenServiceImpl extends AbstractBaseServiceImpl<SgdUsuar
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = {Exception.class}, propagation = Propagation.SUPPORTS)
     public boolean deleteById(Long id) throws Exception {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
+        try{
+            sgdUsuarioTokenRepository.deleteById(id);
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return false;
+        }
+        return true;
+    }   
 }

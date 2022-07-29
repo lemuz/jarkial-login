@@ -1,4 +1,4 @@
-package com.jarkial.login.model.ctg;
+package com.jarkial.login.model.entity.ctg;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

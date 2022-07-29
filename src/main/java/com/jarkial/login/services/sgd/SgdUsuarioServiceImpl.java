@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jarkial.login.model.sgd.SgdUsuario;
+import com.jarkial.login.model.entity.sgd.SgdUsuario;
 import com.jarkial.login.repositories.sgd.SgdUsuarioRepository;
 import com.jarkial.login.services.AbstractBaseServiceImpl;
 
 @Service
 @Transactional
-public class SgdUsuarioServiceImpl extends AbstractBaseServiceImpl<SgdUsuario, Long>{
+public class SgdUsuarioServiceImpl extends AbstractBaseServiceImpl implements SgdUsuarioService{
 
     @Autowired
     SgdUsuarioRepository sgdUsuarioRepository;
@@ -46,5 +46,11 @@ public class SgdUsuarioServiceImpl extends AbstractBaseServiceImpl<SgdUsuario, L
             return false;
         }
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public SgdUsuario findBySgdUsuarioUsername(String username) throws Exception {
+        return sgdUsuarioRepository.findBySgdUsuarioUsername(username).orElse(null);
     }   
 }

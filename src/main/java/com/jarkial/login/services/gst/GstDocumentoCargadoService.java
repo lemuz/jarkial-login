@@ -1,6 +1,8 @@
-/*package com.jarkial.login.services.gst;
+package com.jarkial.login.services.gst;
 
-public interface GstDocumentoCargadoService {
+import com.jarkial.login.model.entity.gst.GstDocumentoCargado;
+import com.jarkial.login.services.AbstractCrudService;
+
+public interface GstDocumentoCargadoService extends AbstractCrudService<GstDocumentoCargado, Long>{
     
 }
-*/

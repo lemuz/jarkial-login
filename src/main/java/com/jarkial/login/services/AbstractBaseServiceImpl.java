@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.jarkial.login.configuration.utils.MyUtils;
 import com.jarkial.login.configuration.utils.MyUtilsConstant;
 
-public abstract class AbstractBaseServiceImpl<C, I> {
+public class AbstractBaseServiceImpl {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -91,12 +91,4 @@ public abstract class AbstractBaseServiceImpl<C, I> {
         String timeStamp = MyUtilsConstant.dateFormatAsYYYYMMDDHHMMSS.format(Calendar.getInstance().getTime());
         return timeStamp;
     }
-
-    public abstract List<C> findAll() throws Exception;
-
-    public abstract C findById(I id) throws Exception;
-
-    public abstract C update(C entity) throws Exception;
-
-    public abstract boolean deleteById(I id) throws Exception;
 }

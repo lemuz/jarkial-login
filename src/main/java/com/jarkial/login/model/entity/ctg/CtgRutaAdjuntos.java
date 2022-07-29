@@ -1,4 +1,4 @@
-package com.jarkial.login.model.ctg;
+package com.jarkial.login.model.entity.ctg;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.jarkial.login.model.entity.sgd.SgdUsuario;
+
 import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.jarkial.login.model.sgd.SgdUsuario;
 
 @Entity
 @Table(name = "CTG_RUTA_ADJUNTOS")

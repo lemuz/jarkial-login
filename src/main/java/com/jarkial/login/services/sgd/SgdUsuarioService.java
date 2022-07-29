@@ -1,11 +1,15 @@
-/*package com.jarkial.login.services.sgd;
+package com.jarkial.login.services.sgd;
 
-import java.util.List;
+import com.jarkial.login.model.entity.sgd.SgdUsuario;
+import com.jarkial.login.services.AbstractCrudService;
 
-import com.jarkial.login.model.sgd.SgdUsuario;
+public interface SgdUsuarioService extends AbstractCrudService<SgdUsuario, Long>{
 
-public interface SgdUsuarioService {
+    SgdUsuario findBySgdUsuarioUsername(String username) throws Exception;
 
+    void actualizarSgdUsuarioLogueado(String sgdUsuarioUsername, int i);
+
+/*
     List<SgdUsuario> findAll() throws Exception;
 
     SgdUsuario findById(Long id) throws Exception;
@@ -13,5 +17,5 @@ public interface SgdUsuarioService {
     SgdUsuario update(SgdUsuario sgdUsuario) throws Exception;
 
     boolean deleteById(Long id) throws Exception;
-    
-}*/
+ */    
+}

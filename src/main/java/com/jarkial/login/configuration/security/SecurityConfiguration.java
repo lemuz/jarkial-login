@@ -2,7 +2,6 @@ package com.jarkial.login.configuration.security;
 
 import java.util.Arrays;
 
-import org.aspectj.weaver.ast.And;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.jarkial.login.configuration.filter.JwtAuthFilter;
-import com.jarkial.login.services.sgd.SgdUsuarioDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -96,7 +94,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
             .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and().addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/**").permitAll()
+            .antMatchers("/security/login").permitAll()
+            .antMatchers("/security/prueba").hasAnyAuthority("ROLE_ADMINISTRADOR")
             .anyRequest().authenticated()
             .and().formLogin().disable()
             .logout().disable();
