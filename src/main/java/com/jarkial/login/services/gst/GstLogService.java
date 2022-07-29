@@ -5,6 +5,6 @@ import com.jarkial.login.services.AbstractCrudService;
 
 public interface GstLogService extends AbstractCrudService<GstLog, Long>{
 
-    GstLog crearGstLog(String string, String ipAddress);
+    GstLog crearGstLog(String string, String ipAddress) throws Exception;
     
 }

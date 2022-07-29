@@ -52,5 +52,5 @@ public class SgdUsuarioServiceImpl extends AbstractBaseServiceImpl implements Sg
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public SgdUsuario findBySgdUsuarioUsername(String username) throws Exception {
         return sgdUsuarioRepository.findBySgdUsuarioUsername(username).orElse(null);
-    }   
+    } 
 }

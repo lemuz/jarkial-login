@@ -7,8 +7,6 @@ public interface SgdUsuarioService extends AbstractCrudService<SgdUsuario, Long>
 
     SgdUsuario findBySgdUsuarioUsername(String username) throws Exception;
 
-    void actualizarSgdUsuarioLogueado(String sgdUsuarioUsername, int i);
-
 /*
     List<SgdUsuario> findAll() throws Exception;
 

@@ -1,5 +1,7 @@
 package com.jarkial.login.configuration.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
@@ -33,5 +35,18 @@ public class MyUtils extends MyUtilsConstant{
 
     public static String getBase64Decode(String cadena){
         return new String(Base64.decodeBase64(Base64.decodeBase64(cadena.getBytes())));
+    }
+
+    public static String getClassName(){
+        StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+        String className = stackTrace[2].getClassName();
+        return className;
+    }
+
+    public static String getStackTrace(Throwable exception){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);
+        return sw.toString();
     }
 }
