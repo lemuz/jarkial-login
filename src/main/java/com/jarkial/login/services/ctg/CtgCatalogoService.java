@@ -5,5 +5,5 @@ import com.jarkial.login.services.AbstractCrudService;
 
 public interface CtgCatalogoService extends AbstractCrudService<CtgCatalogo, Long>{
 
-    CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadre(String string, String string2);
+    CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadreId(String nombre, Long ctgCatalogoPadreId) throws Exception;
 }

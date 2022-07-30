@@ -49,9 +49,9 @@ public class CtgCatalogoServiceImpl extends AbstractBaseServiceImpl implements C
     }
 
     @Override
-    public CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadre(String string, String string2) {
-        // TODO Auto-generated method stub
-        return null;
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadre(String nombre, Long ctgCatalogoPadreId) throws Exception{
+        return ctgCatalogoRepository.findByCtgCatalogoNombreAndCtgCatalogoPadre_CtgCatalogoId(nombre, ctgCatalogoPadreId).orElse(null);
     }
     
 }

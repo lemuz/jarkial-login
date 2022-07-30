@@ -55,7 +55,7 @@ public class LoginController extends AbstractBaseController{
         ResponseEntity<?> responseEntity = new ResponseEntity<>("Usuario se encuentra inactivo", HttpStatus.ACCEPTED);
         loginDto.setIpAddress(getClientIpAddress(request));
         logger.info("prueba");
-        CtgCatalogo mensaje = ctgCatalogoService.findByCtgCatalogoNombreAndCtgCatalogoPadre("LOGIN", "92927");
+        CtgCatalogo mensaje = ctgCatalogoService.findByCtgCatalogoNombreAndCtgCatalogoPadreId("LOGIN", 92927L);
         try{
             Map resp = new LinkedHashMap();
             resp = sgdUsuarioDetailsServiceImpl.login(loginDto);
