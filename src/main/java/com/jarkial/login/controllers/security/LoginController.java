@@ -32,6 +32,7 @@ import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.model.exceptions.MyServiceException;
 import com.jarkial.login.services.ctg.CtgCatalogoService;
 import com.jarkial.login.services.sgd.SgdUsuarioService;
+import com.jarkial.login.webservices.ctg.CtgCatalogoServiceWeb;
 
 @RestController
 @RequestMapping("/security")
@@ -46,7 +47,7 @@ public class LoginController extends AbstractBaseController{
     SgdUsuarioDetailsServiceImpl sgdUsuarioDetailsServiceImpl;
 
     @Autowired
-    CtgCatalogoService ctgCatalogoService;
+    CtgCatalogoServiceWeb ctgCatalogoServiceWeb;
 
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +56,7 @@ public class LoginController extends AbstractBaseController{
         ResponseEntity<?> responseEntity = new ResponseEntity<>("Usuario se encuentra inactivo", HttpStatus.ACCEPTED);
         loginDto.setIpAddress(getClientIpAddress(request));
         logger.info("prueba");
-        CtgCatalogo mensaje = ctgCatalogoService.findByCtgCatalogoNombreAndCtgCatalogoPadre("LOGIN", "92927");
+        CtgCatalogo mensaje = ctgCatalogoServiceWeb.findByCtgCatalogoNombreAndCtgCatalogoPadre("LOGIN", "92927");
         try{
             Map resp = new LinkedHashMap();
             resp = sgdUsuarioDetailsServiceImpl.login(loginDto);

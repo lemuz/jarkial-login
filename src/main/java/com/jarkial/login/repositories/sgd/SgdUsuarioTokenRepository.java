@@ -6,6 +6,6 @@ import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
 import com.jarkial.login.repositories.AbstractBaseRepository;
 
 @Repository
-public interface SgdUsuarioTokenRepository extends AbstractBaseRepository<SgdUsuarioToken, Long>{
+public interface SgdUsuarioTokenRepository extends AbstractBaseRepository<SgdUsuarioToken, String>{
     
 }

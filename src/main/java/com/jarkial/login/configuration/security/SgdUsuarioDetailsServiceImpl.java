@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.annotations.common.util.impl.Log_.logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,6 @@ import com.jarkial.login.configuration.utils.JwtTokenUtils;
 import com.jarkial.login.configuration.utils.MyUtils;
 import com.jarkial.login.model.dto.sgd.CustomUser;
 import com.jarkial.login.model.dto.sgd.Login;
-import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.model.entity.gst.GstLog;
 import com.jarkial.login.model.entity.sgd.SgdRolPerfil;
 import com.jarkial.login.model.entity.sgd.SgdUsuario;
@@ -38,6 +35,7 @@ import com.jarkial.login.services.sgd.SgdRolPerfilService;
 import com.jarkial.login.services.sgd.SgdUsuarioPerfilService;
 import com.jarkial.login.services.sgd.SgdUsuarioService;
 import com.jarkial.login.services.sgd.SgdUsuarioTokenService;
+import com.jarkial.login.webservices.sgd.SgdUsuarioServiceWeb;
 
 @Service
 public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
@@ -46,6 +44,9 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     SgdUsuarioService sgdUsuarioService;
+
+    @Autowired
+    SgdUsuarioServiceWeb sgdUsuarioServiceWeb;
 
     @Autowired
     SgdUsuarioTokenService sgdUsuarioTokenService;
@@ -105,7 +106,24 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
     }
 
     public CustomUser getCustomUser(CustomUser customUser, String username) throws Exception {
-        //
+        SgdUsuario sgdUsuario = sgdUsuarioService.findBySgdUsuarioUsername(username);
+        if(sgdUsuario.getSgdUsuarioActivo().equals("1"))
+            throw new MyServiceException("Atencion: El usuario esta desactivado");
+        String primerNombre = sgdUsuario.getSgdUsuarioPrimerNombre();
+        String segundoNombre = sgdUsuario.getSgdUsuarioSegundoNombre();
+        String primerApellido = sgdUsuario.getSgdUsuarioPrimerApellido();
+        String segundoApellido = sgdUsuario.getSgdUsuarioSegundoApellido();
+        String nombreCompleto = ((primerNombre!=null)? primerNombre : "") + " " + ((segundoNombre!=null)? segundoNombre : "")+ " " + ((primerApellido!=null)? primerApellido : "") + " " + ((segundoApellido!=null)? segundoApellido : "");
+        customUser.setUserId(sgdUsuario.getSgdUsuarioId());
+        customUser.setFullName(nombreCompleto);
+        customUser.setAgenciaId(sgdUsuario.getCtgAgencia().getCtgAgenciaId());
+        customUser.setAgencia(sgdUsuario.getCtgAgencia().getCtgAgenciaDescripcion());
+        customUser.setSubTipoAgenciaId(sgdUsuario.getCtgAgencia().getCtgSubTipoAgencia().getCtgSubTipoAgenciaId());
+        customUser.setSubTipoAgencia(sgdUsuario.getCtgAgencia().getCtgSubTipoAgencia().getCtgSubTipoAgenciaDescripcion());
+        customUser.setTipoAgenciaId(sgdUsuario.getCtgAgencia().getCtgSubTipoAgencia().getCtgTipoAgencia().getCtgTipoAgenciaId());
+        customUser.setTipoAgencia(sgdUsuario.getCtgAgencia().getCtgSubTipoAgencia().getCtgTipoAgencia().getCtgTipoAgenciaDescripcion());
+        customUser.setUser(sgdUsuario.getSgdUsuarioUsername());
+        customUser.setRequiredChangePassword("0");
         return customUser;
     }
 
@@ -121,20 +139,20 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
             GstLog gstLog = new GstLog();
             gstLog = gstLogService.crearGstLog("LOGIN", loginDto.getIpAddress());
             logger.info("Sesion iniciada Usuario: " + usuario.getSgdUsuarioUsername());
-            //actualizar flag logueado
-            sgdUsuarioService.actualizarSgdUsuarioLogueado(usuario.getSgdUsuarioUsername(),1);
+            sgdUsuarioServiceWeb.actualizarSgdUsuarioLogueado(usuario.getSgdUsuarioUsername(),1);
             customUser = loadUserByUsername(loginDto.getUsername());
             if(customUser.getAuthorities() == null || customUser.getAuthorities().size() == 0)
                 throw new MyServiceException("111111", "Error usuario sin ningun perfil activo asociado!");
             String jwtToken = jwtTokenUtils.generateToken(customUser);
             customUser.setToken(jwtToken);
             customUser.setUserId(usuario.getSgdUsuarioId());
-            customUser.setUserName(usuario.getSgdUsuarioUsername());
+            //revisar carga del username en user details
+            //customUser.setUsername(usuario.getSgdUsuarioUsername());
             customUser.setAgencia(usuario.getCtgAgencia().getCtgAgenciaDescripcion());
 
             SgdUsuarioToken sgdUsuarioToken = new SgdUsuarioToken();
             sgdUsuarioToken.setSgdUsuarioClave(MyUtils.getBase64Encode(customUser.getPassword()));
-            sgdUsuarioToken.setSgdUsuarioId(customUser.getUserName());
+            sgdUsuarioToken.setSgdUsuarioId(usuario.getSgdUsuarioUsername());
             sgdUsuarioToken.setSgdUsuarioUsername(customUser.getFullName());
             sgdUsuarioToken.setSgdUsuarioAuthorization(jwtToken);
             sgdUsuarioTokenService.update(sgdUsuarioToken);

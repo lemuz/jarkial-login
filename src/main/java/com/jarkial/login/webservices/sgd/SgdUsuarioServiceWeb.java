@@ -1,4 +1,4 @@
-package com.jarkial.login.webservices;
+package com.jarkial.login.webservices.sgd;
 
 public interface SgdUsuarioServiceWeb {
     

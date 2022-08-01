@@ -62,7 +62,7 @@ public class ActiveDirectoryLdapAuthenticationProvider implements Authentication
     @Setter
     private boolean convertSubErrorCodesToExceptions;
 
-    //Only used to allow tests to substitu a mock LdapContext
+    //Only used to allow tests to substitute a mock LdapContext
     ContextFactory contextFactory = new ContextFactory();
 
     

@@ -16,7 +16,7 @@ public class CustomUser extends User{
     private Long userId;
 
     @Getter @Setter
-    private String userName;
+    private String user;
 
     @Getter @Setter
     private String fullName;

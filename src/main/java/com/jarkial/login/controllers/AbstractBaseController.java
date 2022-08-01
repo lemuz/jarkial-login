@@ -64,7 +64,7 @@ public class AbstractBaseController {
         OutResponse responseEntity = new OutResponse();
         responseEntity.setContent(content);
         responseEntity.setMessage(message);
-        responseEntity.setCodigo(codigo);
+        responseEntity.setCode(codigo);
         responseEntity.setErrors(null);
         return new ResponseEntity<Object>(responseEntity, status);
     }
@@ -85,7 +85,7 @@ public class AbstractBaseController {
     protected ResponseEntity<?> generateErrorResponseWithCode(Exception exception, String message, HttpStatus status, String code){
         OutResponse responseEntity = new OutResponse();
         responseEntity.setMessage(message);
-        responseEntity.setCodigo(code);
+        responseEntity.setCode(code);
         responseEntity.setErrors((exception!=null)? exception.getMessage() : "Desconocido");
         return new ResponseEntity<Object>(responseEntity, status);
     }
@@ -183,14 +183,14 @@ public class AbstractBaseController {
     protected ResponseEntity<?> generatePageableResponse(Page<?> page, HttpStatus status){
         OutPageResponse responseEntity = new OutPageResponse();
         if(page != null){
-            responseEntity.setCodigo("000000");
+            responseEntity.setCode("000000");
             responseEntity.setContent(page.getContent());
             responseEntity.setSize(page.getSize());
             responseEntity.setTotalCount(page.getTotalElements());
             responseEntity.setTotalPages(page.getTotalPages());
             responseEntity.setPageNumber(page.getNumber());
         }else{
-            responseEntity.setCodigo("000001");
+            responseEntity.setCode("000001");
             responseEntity.setMessage("Pagina no existente");
         }
         return new ResponseEntity<Object>(responseEntity, status);
