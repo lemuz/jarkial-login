@@ -18,8 +18,9 @@ public class CtgCatalogo {
     
     @Id
     @Column(name = "ctg_cat_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdCtgCatalogoGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdCtgCatalogoGenerator", sequenceName = "ctg_cat_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdCtgCatalogoGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdCtgCatalogoGenerator", sequenceName = "ctg_cat_id_seq")*/
     @Getter @Setter
     private Long ctgCatalogoId;
 

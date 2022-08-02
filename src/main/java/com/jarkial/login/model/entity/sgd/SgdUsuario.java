@@ -21,8 +21,9 @@ public class SgdUsuario {
     
     @Id
     @Column(name = "sgd_usu_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdUsuarioGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdSgdUsuarioGenerator", sequenceName = "sgd_usu_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdUsuarioGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdSgdUsuarioGenerator", sequenceName = "sgd_usu_id_seq")*/
     @Getter @Setter
     private Long sgdUsuarioId;
 
@@ -84,7 +85,7 @@ public class SgdUsuario {
     @Getter @Setter
     private Integer sgdUsuarioLoginIntento;
 
-    @Column(name = "sgd_usu_fecha_expiracion", length=20)
+    @Column(name = "sgd_usu_fecha_expiracion_clave", length=20)
     @Getter @Setter
     private String sgdUsuarioFechaExpiracion;
 

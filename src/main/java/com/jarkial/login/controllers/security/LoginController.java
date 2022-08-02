@@ -47,7 +47,7 @@ public class LoginController extends AbstractBaseController{
     SgdUsuarioDetailsServiceImpl sgdUsuarioDetailsServiceImpl;
 
     @Autowired
-    CtgCatalogoServiceWeb ctgCatalogoServiceWeb;
+    CtgCatalogoService ctgCatalogoService;
 
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,8 +55,14 @@ public class LoginController extends AbstractBaseController{
     public ResponseEntity login(@RequestBody @NotBlank @Valid Login loginDto, HttpServletRequest request, HttpServletResponse response) throws MyServiceException{
         ResponseEntity<?> responseEntity = new ResponseEntity<>("Usuario se encuentra inactivo", HttpStatus.ACCEPTED);
         loginDto.setIpAddress(getClientIpAddress(request));
-        logger.info("prueba");
-        CtgCatalogo mensaje = ctgCatalogoServiceWeb.findByCtgCatalogoNombreAndCtgCatalogoPadre("LOGIN", "92927");
+        logger.info("login");
+        CtgCatalogo mensaje;
+        try{
+            mensaje = ctgCatalogoService.findByCtgCatalogoNombreAndCtgCatalogoPadreId("LOGIN", 92927L);
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return generateErrorResponseWithCode(exception, "Error al obtener mensaje", HttpStatus.OK, "10000");
+        }
         try{
             Map resp = new LinkedHashMap();
             resp = sgdUsuarioDetailsServiceImpl.login(loginDto);
@@ -71,19 +77,24 @@ public class LoginController extends AbstractBaseController{
         return responseEntity;
     }
 
-    @GetMapping("/prueba")
+    /*@GetMapping("/prueba")
     public ResponseEntity<?> prueba(){
         ResponseEntity<?> response = null;
-        logger.info("prueba");
         response = new ResponseEntity<Object>("{ \"mensaje\": \"Hola\" }", HttpStatus.OK);
         return response;
-    }
+    }*/
  
-    @GetMapping("/accessDenied")
+    @RequestMapping("/accessDenied")
     public ResponseEntity<?> accessDenied(){
         ResponseEntity<?> response = null;
-        logger.info("accessDenied");
-        response = new ResponseEntity<Object>("{ \"mensaje\": \"Sin permisos\" }", HttpStatus.OK);
+        response = generateSingleResponseWithCode("Accesso Denegado", "", HttpStatus.FORBIDDEN, "403");
+        return response;
+    }
+
+    @RequestMapping("/unauthorized")
+    public ResponseEntity<?> unauthorized(){
+        ResponseEntity<?> response = null;
+        response = generateSingleResponseWithCode("Sin autenticación", "", HttpStatus.UNAUTHORIZED, "401");
         return response;
     }
 }

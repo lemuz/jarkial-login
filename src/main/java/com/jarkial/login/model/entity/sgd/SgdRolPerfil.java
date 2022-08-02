@@ -21,8 +21,9 @@ public class SgdRolPerfil {
     
     @Id
     @Column(name = "sgd_rol_per_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdRolPerfilGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdSgdRolPerfilGenerator", sequenceName = "sgd_rol_per_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdRolPerfilGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdSgdRolPerfilGenerator", sequenceName = "sgd_rol_per_id_seq")*/
     @Getter @Setter
     private Long sgdRolPerfilId;
 

@@ -1,6 +1,9 @@
 package com.jarkial.login.configuration.security;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +30,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.jarkial.login.configuration.filter.JwtAuthFilter;
+import com.jarkial.login.model.entity.ctg.CtgCatalogo;
+import com.jarkial.login.services.ctg.CtgCatalogoService;
 
 @Configuration
 @EnableWebSecurity
@@ -54,10 +59,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     SgdUsuarioDetailsServiceImpl sgdUsuarioDetailsService;
 
     @Autowired
+    CtgCatalogoService ctgCatalogoService;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder){
         authenticationManagerBuilder.authenticationProvider(authenticationProvider());
     }
 
+/*    
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -65,14 +74,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+*/
 
-/*    @Bean
+    @Bean
     public ActiveDirectoryLdapAuthenticationProvider authenticationProvider(){
-        ActiveDirectoryLdapAuthenticationProvider authProvider = new ActiveDirectoryLdapAuthenticationProvider();
+        ActiveDirectoryLdapAuthenticationProvider authProvider = new ActiveDirectoryLdapAuthenticationProvider(domain, url);
         authProvider.setConvertSubErrorCodesToExceptions(true);
         return authProvider;
     }
- */
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -87,6 +97,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
      @Override
      protected void configure(HttpSecurity httpSecurity) throws Exception{
         try{
+            List<String> allRoles = ctgCatalogoService.findAll().stream().distinct().map(CtgCatalogo::getCtgCatalogoNombre).collect(Collectors.toList());
             httpSecurity.cors().and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
             httpSecurity.headers()
             .and()
@@ -94,8 +105,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
             .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and().addFilterAfter(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
+            /*
+            .antMatchers("/").permitAll()
+            .antMatchers("/resources/**").permitAll()
+            .antMatchers("/*.ico").permitAll()
+            .antMatchers("/assets/images/*").permitAll()
+            .antMatchers("/runtime.*.js").permitAll()
+            .antMatchers("/polyfills.*.js").permitAll()
+            .antMatchers("/main.*.js").permitAll()
+            .antMatchers("/*.*.js").permitAll()
+            .antMatchers("/material-icons.*.woff").permitAll()
+            .antMatchers("/material-icons.*.woff2").permitAll()
+            .antMatchers("/material-icons-outlined.*.woff").permitAll()
+            .antMatchers("/material-icons-outlined.*.woff2").permitAll()
+
+            //agregar una pleca despues de los primeros **
+            .antMatchers("/assets/**js/*.min.js").permitAll()
+            .antMatchers("/assets/**js/*.min.js.map").permitAll()
+            .antMatchers("/assets/**css/*.min.css").permitAll()
+            .antMatchers("/assets/**css/*.min.css.map").permitAll()
+            .antMatchers("/assets/**css/*.css").permitAll()
+            .antMatchers("/assets/**fonts/*").permitAll()
+            .antMatchers("/assets/**fonts-awesome-4.7.0/**").permitAll()
+            //
+            
+            .antMatchers("/assets/roboto/*.ttf").permitAll()
+            .antMatchers("/assets/bootstrap/**").permitAll()
+            .antMatchers("/styles.*.css").permitAll()
+            .antMatchers("/assets/material-icons/iconfont/**").permitAll()
+            */
             .antMatchers("/security/login").permitAll()
-            .antMatchers("/security/prueba").hasAnyAuthority("ROLE_ADMINISTRADOR")
+            .antMatchers("/security/prueba").hasAnyAuthority(allRoles.toArray(new String[allRoles.size()]))
             .anyRequest().authenticated()
             .and().formLogin().disable()
             .logout().disable();

@@ -49,8 +49,15 @@ public class CtgCatalogoServiceImpl extends AbstractBaseServiceImpl implements C
     }
 
     @Override
-    public CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadre(String nombre, CtgCatalogo padre) {
-        return ctgCatalogoRepository.findByCtgCatalogoNombreAndCtgCatalogoPadre(nombre, padre).orElse(null);
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public CtgCatalogo findByCtgCatalogoNombreAndCtgCatalogoPadreId(String nombre, Long ctgCatalogoPadreId) throws Exception{
+        return ctgCatalogoRepository.findByCtgCatalogoNombreAndCtgCatalogoPadre_CtgCatalogoId(nombre, ctgCatalogoPadreId).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<CtgCatalogo> findAllByCtgCatalogoPadreId(Long ctgCatalogoPadreId) throws Exception {
+        return ctgCatalogoRepository.findAllByCtgCatalogoPadre_CtgCatalogoId(ctgCatalogoPadreId);
 
     }
     

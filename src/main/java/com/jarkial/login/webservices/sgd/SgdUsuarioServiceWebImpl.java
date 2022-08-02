@@ -3,10 +3,12 @@ package com.jarkial.login.webservices.sgd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jarkial.login.model.entity.sgd.SgdUsuario;
 import com.jarkial.login.services.sgd.SgdUsuarioService;
 
+@Service
 public class SgdUsuarioServiceWebImpl implements SgdUsuarioServiceWeb{
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -22,8 +22,9 @@ public class CtgRutaAdjuntos {
 
     @Id
     @Column(name = "ctg_ruta_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdCtgRutaAdjuntosGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdCtgRutaAdjuntosGenerator", sequenceName = "ctg_ruta_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdCtgRutaAdjuntosGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdCtgRutaAdjuntosGenerator", sequenceName = "ctg_ruta_id_seq")*/
     @Getter @Setter
     private Long ctgRutaAdjuntosId;
 

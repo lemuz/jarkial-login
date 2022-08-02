@@ -27,7 +27,7 @@ public class SgdUsuarioTokenServiceImpl extends AbstractBaseServiceImpl implemen
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public SgdUsuarioToken findById(Long id) throws Exception {
+    public SgdUsuarioToken findById(String id) throws Exception {
         return sgdUsuarioTokenRepository.findById(id).orElse(null);
 
     }
@@ -40,7 +40,7 @@ public class SgdUsuarioTokenServiceImpl extends AbstractBaseServiceImpl implemen
 
     @Override
     @Transactional(readOnly = false, rollbackFor = {Exception.class}, propagation = Propagation.SUPPORTS)
-    public boolean deleteById(Long id) throws Exception {
+    public boolean deleteById(String id) throws Exception {
         try{
             sgdUsuarioTokenRepository.deleteById(id);
         }catch(Exception exception){

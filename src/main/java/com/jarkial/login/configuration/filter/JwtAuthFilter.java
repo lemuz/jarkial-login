@@ -26,7 +26,6 @@ import com.jarkial.login.model.dto.OutResponse;
 import com.jarkial.login.model.dto.sgd.CustomUser;
 import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
 import com.jarkial.login.repositories.sgd.SgdUsuarioTokenRepository;
-import com.jarkial.login.services.sgd.SgdUsuarioTokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -54,7 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String[] resourcePath = request.getServletPath().split("/");
         String resourceName = null;
         if (resourcePath.length > 0) {
-            resourceName = resourcePath[1];
+            resourceName = resourcePath.length>2? resourcePath[1]+"/"+resourcePath[2]: resourcePath[1];
         }
         List<String> rolesUsuario = null;
         String jwtToken = null;
@@ -62,11 +61,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             jwtToken = StringUtils.isBlank(requestTokenHeader) ? null : requestTokenHeader;
             String regex = "[1-z0-9]+\\.[1-z0-9]+\\.(js|css|woff|woff2|ttf)+";
             Pattern patron = Pattern.compile(regex);
-            if (!StringUtils.equals(resourceName, "security") && resourceName != null
+            if (!StringUtils.equals(resourceName, "security/login") && resourceName != null
                     && !StringUtils.equals(resourceName, "assets") && !patron.matcher(resourceName).find()
                     && !StringUtils.equals(resourceName, "favicon.ico")) {
                 if (jwtToken == null) {
-                    logger.warn("TOKEN NO ENVIADO");
+                    //logger.warn("TOKEN NO ENVIADO");
                     OutResponse outResponse = new OutResponse();
                     outResponse.setCode(OutResponse.COD_JWT_MISSING);
                     outResponse.setMessage(OutResponse.MSG_JWT_MISSING);
@@ -84,21 +83,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     if (sgdUsuarioToken != null) {
                         CustomUser userDetails = sgdUsuarioDetailsServiceImpl.loadUserByUsername(userName);
                         if (jwtTokenUtils.validateToken(jwtToken, userDetails)) {
-                            logger.info("ACTUALIZANDO TOKEN");
+                            //logger.info("ACTUALIZANDO TOKEN");
                             String newJwtToken = jwtTokenUtils.generateToken(userDetails);
                             response.addHeader("token", newJwtToken);
                             sgdUsuarioToken.setSgdUsuarioId(userDetails.getUsername());
                             sgdUsuarioToken.setSgdUsuarioAuthorization(newJwtToken);
                             sgdUsuarioToken.setSgdUsuarioUsername(userDetails.getUsername());
                             sgdUsuarioTokenRepository.saveAndFlush(sgdUsuarioToken);
-                            logger.info("TOKEN VALIDO");
+                            //logger.info("TOKEN VALIDO");
                             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                                     userDetails, null, userDetails.getAuthorities());
                             usernamePasswordAuthenticationToken
                                     .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                         } else {
-                            logger.warn("INVALID TOKEN");
+                            //logger.warn("INVALID TOKEN");
                             OutResponse outResponse = new OutResponse();
                             outResponse.setCode(OutResponse.COD_JWT_INVALID);
                             outResponse.setMessage(OutResponse.MSG_JWT_INVALID);
@@ -106,7 +105,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             request.getRequestDispatcher("/security/unathorized").forward(request, response);
                         }
                     } else {
-                        logger.error("USUARIO YA SE ENCUENTRA LOGEADO");
+                        //logger.error("USUARIO YA SE ENCUENTRA LOGEADO");
                         OutResponse outResponse = new OutResponse();
                         outResponse.setCode(OutResponse.COD_JWT_SESSION_DUPLICATE);
                         outResponse.setMessage(OutResponse.MSG_JWT_SESSION_DUPLICATE);
@@ -116,14 +115,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException exception) {
-            logger.error("TOKEN EXPIRED");
+            //logger.error("TOKEN EXPIRED");
             OutResponse outResponse = new OutResponse();
             outResponse.setCode(OutResponse.COD_JWT_EXPIRED);
             outResponse.setMessage(OutResponse.MSG_JWT_EXPIRED);
             request.setAttribute(variableResponse, outResponse);
             request.getRequestDispatcher("/security/unathorized").forward(request, response);
         } catch (SignatureException exception) {
-            logger.error("INVALID TOKEN");
+            //logger.error("INVALID TOKEN");
             OutResponse outResponse = new OutResponse();
             outResponse.setCode(OutResponse.COD_JWT_INVALID);
             outResponse.setMessage(OutResponse.MSG_JWT_INVALID);

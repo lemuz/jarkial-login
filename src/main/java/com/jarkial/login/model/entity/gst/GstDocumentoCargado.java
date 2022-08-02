@@ -21,8 +21,9 @@ public class GstDocumentoCargado {
     
     @Id
     @Column(name = "gst_dcar_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdGstDocumentoCargadoGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdGstDocumentoCargadoGenerator", sequenceName = "gst_dcar_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdGstDocumentoCargadoGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdGstDocumentoCargadoGenerator", sequenceName = "gst_dcar_id_seq")*/
     @Getter @Setter
     private Long gstDocumentoCargadoId;
 

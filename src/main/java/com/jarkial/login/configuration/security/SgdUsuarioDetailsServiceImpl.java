@@ -107,7 +107,7 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
 
     public CustomUser getCustomUser(CustomUser customUser, String username) throws Exception {
         SgdUsuario sgdUsuario = sgdUsuarioService.findBySgdUsuarioUsername(username);
-        if(sgdUsuario.getSgdUsuarioActivo().equals("1"))
+        if(sgdUsuario.getSgdUsuarioActivo().equals("0"))
             throw new MyServiceException("Atencion: El usuario esta desactivado");
         String primerNombre = sgdUsuario.getSgdUsuarioPrimerNombre();
         String segundoNombre = sgdUsuario.getSgdUsuarioSegundoNombre();
@@ -127,11 +127,13 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
         return customUser;
     }
 
-    public Map login(Login loginDto) {
+    public Map login(Login loginDto) throws MyServiceException{
         CustomUser customUser = null;
         try{
         SgdUsuario usuario = sgdUsuarioService.findBySgdUsuarioUsername(loginDto.getUsername());
-        if(usuario.getSgdUsuarioActivo().equals("1")){
+        if(usuario==null){
+            throw new MyServiceException("Usuario inexistente");
+        }else if(usuario.getSgdUsuarioActivo().equals("1")){
             UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
             Authentication auth = authenticationManager.authenticate(authReq);
             SecurityContext sc = SecurityContextHolder.getContext();
@@ -158,9 +160,8 @@ public class SgdUsuarioDetailsServiceImpl implements UserDetailsService {
             sgdUsuarioTokenService.update(sgdUsuarioToken);
         }
         }catch(Exception exception){
-            exception.printStackTrace();
+            throw new MyServiceException(exception);
         }
-        //
         Map resp = new LinkedHashMap();
         resp.put("response", customUser);
         resp.put("code", "00");

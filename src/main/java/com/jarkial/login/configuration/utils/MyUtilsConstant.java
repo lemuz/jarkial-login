@@ -11,6 +11,6 @@ public class MyUtilsConstant {
 
     public static final SimpleDateFormat dateFormatAsYYYYMMDDHHMMSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static final SimpleDateFormat dateFormatAsYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat dateFormatAsYYYYMMDD = new SimpleDateFormat("yyyyMMdd");
     
 }

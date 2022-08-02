@@ -21,8 +21,9 @@ public class SgdUsuarioPerfil {
 
     @Id
     @Column(name = "sgd_usu_per_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdUsuarioPerfilGenerator")
-    @SequenceGenerator(allocationSize = 1, name = "IdSgdUsuarioPerfilGenerator", sequenceName = "sgd_usu_per_id_seq")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    /*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "IdSgdUsuarioPerfilGenerator")
+    @SequenceGenerator(allocationSize = 1, name = "IdSgdUsuarioPerfilGenerator", sequenceName = "sgd_usu_per_id_seq")*/
     @Getter @Setter
     private Long sgdUsuarioPerfilId;
 
