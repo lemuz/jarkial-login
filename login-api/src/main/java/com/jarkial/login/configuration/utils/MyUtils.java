@@ -1,16 +1,15 @@
 package com.jarkial.login.configuration.utils;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.UUID;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.MDC;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.UUID;
 
 public class MyUtils extends MyUtilsConstant{
 

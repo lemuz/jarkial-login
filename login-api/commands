@@ -1,0 +1,5 @@
+/home/alex/.sdkman/candidates/java/8.0.352-zulu/bin/java -Dmaven.multiModuleProjectDirectory=/home/alex/Descargas/proyectos/jarkial-login/login-api -Dmaven.home=/home/alex/Descargas/idea-IC-222.4345.14/plugins/maven/lib/maven3 -Dclassworlds.conf=/home/alex/Descargas/idea-IC-222.4345.14/plugins/maven/lib/maven3/bin/m2.conf -Dmaven.ext.class.path=/home/alex/Descargas/idea-IC-222.4345.14/plugins/maven/lib/maven-event-listener.jar -javaagent:/home/alex/Descargas/idea-IC-222.4345.14/lib/idea_rt.jar=40113:/home/alex/Descargas/idea-IC-222.4345.14/bin -Dfile.encoding=UTF-8 -classpath /home/alex/Descargas/idea-IC-222.4345.14/plugins/maven/lib/maven3/boot/plexus-classworlds.license:/home/alex/Descargas/idea-IC-222.4345.14/plugins/maven/lib/maven3/boot/plexus-classworlds-2.6.0.jar org.codehaus.classworlds.Launcher -Didea.version=2022.2.3 clean compile package
+
+
+/home/alex/.sdkman/candidates/java/8.0.352-zulu/jre/bin/java -Dfile.encoding=UTF-8 -jar /home/alex/Descargas/proyectos/jarkial-login/login-api/target/login-0.0.1-SNAPSHOT.jar
+

@@ -1,20 +1,11 @@
 package com.jarkial.login.model.entity.ctg;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.jarkial.login.model.entity.sgd.SgdUsuario;
-
-import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "CTG_RUTA_ADJUNTOS")

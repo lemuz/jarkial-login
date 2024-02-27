@@ -1,11 +1,8 @@
 package com.jarkial.login.services;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonView;
+import com.jarkial.login.configuration.utils.MyUtils;
+import com.jarkial.login.configuration.utils.MyUtilsConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.jarkial.login.configuration.utils.MyUtils;
-import com.jarkial.login.configuration.utils.MyUtilsConstant;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 public class AbstractBaseServiceImpl {
 

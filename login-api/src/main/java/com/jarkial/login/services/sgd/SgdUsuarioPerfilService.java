@@ -1,10 +1,10 @@
 package com.jarkial.login.services.sgd;
 
-import java.util.List;
-
 import com.jarkial.login.model.entity.sgd.SgdUsuario;
 import com.jarkial.login.model.entity.sgd.SgdUsuarioPerfil;
 import com.jarkial.login.services.AbstractCrudService;
+
+import java.util.List;
 
 public interface SgdUsuarioPerfilService extends AbstractCrudService<SgdUsuarioPerfil, Long>{
 

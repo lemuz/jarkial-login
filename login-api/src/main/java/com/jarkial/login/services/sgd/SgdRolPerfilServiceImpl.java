@@ -1,16 +1,15 @@
 package com.jarkial.login.services.sgd;
 
-import java.util.List;
-
+import com.jarkial.login.model.entity.ctg.CtgCatalogo;
+import com.jarkial.login.model.entity.sgd.SgdRolPerfil;
+import com.jarkial.login.repositories.sgd.SgdRolPerfilRepository;
+import com.jarkial.login.services.AbstractBaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jarkial.login.model.entity.ctg.CtgCatalogo;
-import com.jarkial.login.model.entity.sgd.SgdRolPerfil;
-import com.jarkial.login.repositories.sgd.SgdRolPerfilRepository;
-import com.jarkial.login.services.AbstractBaseServiceImpl;
+import java.util.List;
 
 @Service
 @Transactional

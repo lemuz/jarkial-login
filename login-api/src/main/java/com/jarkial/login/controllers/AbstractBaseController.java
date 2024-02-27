@@ -1,18 +1,10 @@
 package com.jarkial.login.controllers;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-//import javax.xml.ws.Response;
-
+import com.fasterxml.jackson.annotation.JsonView;
+import com.jarkial.login.configuration.utils.MyUtilsConstant;
+import com.jarkial.login.model.dto.OutPageResponse;
+import com.jarkial.login.model.dto.OutResponse;
+import com.jarkial.login.model.exceptions.MyServiceException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +23,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.jarkial.login.configuration.utils.MyUtilsConstant;
-import com.jarkial.login.model.dto.OutPageResponse;
-import com.jarkial.login.model.dto.OutResponse;
-import com.jarkial.login.model.exceptions.MyServiceException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @RestControllerAdvice
 public class AbstractBaseController {

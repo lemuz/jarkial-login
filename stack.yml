@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+#database engine service
+  mariadb_db:
+    container_name: mariadb-server
+    image: mariadb:latest
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+        #allow *.sql, *.sql.gz, or *.sh and is execute only if data directory is empty
+      - ./dbfiles:/docker-entrypoint-initdb.d
+      - /var/lib/mariadb_data:/var/lib/mysql
+      - /var/lib/mariadb_backup:/var/lib/backup
+    environment:
+      MARIADB_USER: WEBJARKIALIIT
+      MARIADB_PASSWORD: WEBJARKIALIIT
+      MARIADB_ROOT_PASSWORD: Root123!
+      MARIADB_DATABASE: WEBJARKIALIIT
+      #MARIADB_ROOT_HOST: %

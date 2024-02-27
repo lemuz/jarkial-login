@@ -1,11 +1,16 @@
 package com.jarkial.login.configuration;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
-import javax.net.ssl.SSLContext;
+import com.jarkial.login.configuration.filter.RequestStatisticsInterceptor;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
@@ -15,10 +20,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
-/*
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
- */
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;
@@ -28,16 +29,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-import com.jarkial.login.configuration.filter.RequestStatisticsInterceptor;
+import javax.net.ssl.SSLContext;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 @Configuration
 @EnableAsync
@@ -48,7 +45,13 @@ public class AppConfiguration implements WebMvcConfigurer//, SchedulingConfigure
 
     @Autowired
     RequestStatisticsInterceptor requestStatistisInterceptor;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
     
+    @Value("${server.port}")
+    private int port;
+
     @Bean
     public FilterRegistrationBean resourceFilterRegistrationBean(){
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
@@ -122,8 +125,8 @@ public class AppConfiguration implements WebMvcConfigurer//, SchedulingConfigure
     @Bean
     public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer(){
         return factory -> {
-            factory.setPort(8080);
-            factory.setContextPath("/com-jarkial-api-login");
+            factory.setPort(port);
+            factory.setContextPath(contextPath);
         };
     }
 }

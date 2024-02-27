@@ -1,12 +1,11 @@
 package com.jarkial.login.webservices.sgd;
 
+import com.jarkial.login.model.entity.sgd.SgdUsuario;
+import com.jarkial.login.services.sgd.SgdUsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.jarkial.login.model.entity.sgd.SgdUsuario;
-import com.jarkial.login.services.sgd.SgdUsuarioService;
 
 @Service
 public class SgdUsuarioServiceWebImpl implements SgdUsuarioServiceWeb{
@@ -17,13 +16,14 @@ public class SgdUsuarioServiceWebImpl implements SgdUsuarioServiceWeb{
     SgdUsuarioService sgdUsuarioService;
 
     @Override
-    public void actualizarSgdUsuarioLogueado(String sgdUsuarioUsername, Integer logueado) {
+    public String actualizarSgdUsuarioLogueado(String sgdUsuarioUsername, Integer logueado) {
         logger.info("Actualizar usuario logueado: " + sgdUsuarioUsername + " logueado: " + logueado);
         String ms = "OK";
         try{
             if(sgdUsuarioUsername != null && !sgdUsuarioUsername.isEmpty() && logueado != null){
                 SgdUsuario sgdUsuario = sgdUsuarioService.findBySgdUsuarioUsername(sgdUsuarioUsername);
                 if(sgdUsuario != null){
+                    //chequear si se limpiara el contexto  cuando la accion sea deslogeo
                     sgdUsuario.setSgdUsuarioLogueado(logueado);
                     sgdUsuarioService.update(sgdUsuario);
                     logger.info("Usuario actualizado exitosamente!");
@@ -38,6 +38,7 @@ public class SgdUsuarioServiceWebImpl implements SgdUsuarioServiceWeb{
         }catch(Exception exception){
             exception.printStackTrace();
         }
+        return ms;
         
     }  
    

@@ -1,12 +1,11 @@
 package com.jarkial.login.repositories.ctg;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Repository;
-
 import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.repositories.AbstractBaseRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CtgCatalogoRepository extends AbstractBaseRepository<CtgCatalogo, Long>{

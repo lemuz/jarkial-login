@@ -1,10 +1,10 @@
 package com.jarkial.login.model.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class OutResponse implements Serializable{
 

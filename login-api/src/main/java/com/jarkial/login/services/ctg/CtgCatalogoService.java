@@ -1,9 +1,9 @@
 package com.jarkial.login.services.ctg;
 
-import java.util.List;
-
 import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.services.AbstractCrudService;
+
+import java.util.List;
 
 public interface CtgCatalogoService extends AbstractCrudService<CtgCatalogo, Long>{
     

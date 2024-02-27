@@ -1,38 +1,40 @@
 package com.jarkial.login.configuration.utils;
 
-import java.io.Serializable;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
 import com.jarkial.login.model.dto.sgd.CustomUser;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenUtils implements Serializable{
 
     public final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    // private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     @Value("${jarkial.jwt.secret-key}")
     private String jwtSecret;
 
     @Value("${jarkial.jwt.token-lifetime}")
     private Long jwtTokenLifeTime;
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String getUsernamefromToken(String token){ return getClaimFromToken(token, Claims::getSubject);}
 
@@ -44,8 +46,10 @@ public class JwtTokenUtils implements Serializable{
     }
 
     public Claims getAllClaimsFromToken(String token){
+        //chuequear posible fix de implementacion deprecated
+        // Claims claims = Jwts.parserBuilder().build()
         Claims claims = Jwts.parser()
-    .setSigningKey(key)
+    .setSigningKey(getSigningKey())
     .parseClaimsJws(token)
     .getBody();
     return claims;
@@ -81,14 +85,12 @@ public class JwtTokenUtils implements Serializable{
     }
 
     private String doGenerateToken(List<String> data, String subject){
-        String id = MyUtils.getTransactionId();
-        //byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
-        
+        String id = MyUtils.getTransactionId();        
         return Jwts.builder()
         .setId(id).claim("data", data).setSubject(subject)
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(Long.sum(System.currentTimeMillis(), jwtTokenLifeTime)))
-        .signWith(key, SignatureAlgorithm.HS512)
+        .signWith(getSigningKey(), SignatureAlgorithm.HS512)
         .compact();
     }
 

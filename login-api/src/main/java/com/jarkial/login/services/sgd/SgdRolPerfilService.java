@@ -1,10 +1,10 @@
 package com.jarkial.login.services.sgd;
 
-import java.util.List;
-
-import com.jarkial.login.services.AbstractCrudService;
 import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.model.entity.sgd.SgdRolPerfil;
+import com.jarkial.login.services.AbstractCrudService;
+
+import java.util.List;
 
 
 public interface SgdRolPerfilService extends AbstractCrudService<SgdRolPerfil, Long>{

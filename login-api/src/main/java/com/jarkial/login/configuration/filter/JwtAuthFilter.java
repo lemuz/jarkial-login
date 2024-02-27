@@ -1,15 +1,14 @@
 package com.jarkial.login.configuration.filter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.jarkial.login.configuration.security.SgdUsuarioDetailsServiceImpl;
+import com.jarkial.login.configuration.utils.JwtTokenUtils;
+import com.jarkial.login.model.dto.OutResponse;
+import com.jarkial.login.model.dto.sgd.CustomUser;
+import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
+import com.jarkial.login.repositories.sgd.SgdUsuarioTokenRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,16 +19,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.jarkial.login.configuration.security.SgdUsuarioDetailsServiceImpl;
-import com.jarkial.login.configuration.utils.JwtTokenUtils;
-import com.jarkial.login.model.dto.OutResponse;
-import com.jarkial.login.model.dto.sgd.CustomUser;
-import com.jarkial.login.model.entity.sgd.SgdUsuarioToken;
-import com.jarkial.login.repositories.sgd.SgdUsuarioTokenRepository;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -73,6 +70,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     request.getRequestDispatcher("/security/unathorized").forward(request, response);
                     return;
                 }
+                //chequear si se seguiran guardando los roles dentro del token, ya que esto puede ocasionar ṕroblemas en el navegador cuando sea muy grande la lista de roles
                 Claims claims = jwtTokenUtils.getAllClaimsFromToken(jwtToken);
                 rolesUsuario = jwtTokenUtils.getDataRolesClaims(claims);
                 List<GrantedAuthority> authorities = new ArrayList<>();
@@ -87,6 +85,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             String newJwtToken = jwtTokenUtils.generateToken(userDetails);
                             response.addHeader("token", newJwtToken);
                             sgdUsuarioToken.setSgdUsuarioId(userDetails.getUsername());
+                            //chequear si se seguira guardando el token en la base de datos para solo permitir una sesion
                             sgdUsuarioToken.setSgdUsuarioAuthorization(newJwtToken);
                             sgdUsuarioToken.setSgdUsuarioUsername(userDetails.getUsername());
                             sgdUsuarioTokenRepository.saveAndFlush(sgdUsuarioToken);

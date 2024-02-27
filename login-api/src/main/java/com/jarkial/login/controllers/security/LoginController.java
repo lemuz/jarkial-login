@@ -1,50 +1,34 @@
 package com.jarkial.login.controllers.security;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
-import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.jarkial.login.configuration.security.SgdUsuarioDetailsServiceImpl;
+import com.jarkial.login.configuration.utils.MyUtils;
 import com.jarkial.login.controllers.AbstractBaseController;
-import com.jarkial.login.model.dto.sgd.CustomUser;
 import com.jarkial.login.model.dto.sgd.Login;
 import com.jarkial.login.model.entity.ctg.CtgCatalogo;
 import com.jarkial.login.model.exceptions.MyServiceException;
 import com.jarkial.login.services.ctg.CtgCatalogoService;
 import com.jarkial.login.services.sgd.SgdUsuarioService;
-import com.jarkial.login.webservices.ctg.CtgCatalogoServiceWeb;
+import com.jarkial.login.webservices.sgd.SgdUsuarioServiceWeb;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PropertyReferenceException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/security")
@@ -60,6 +44,9 @@ public class LoginController extends AbstractBaseController{
 
     @Autowired
     CtgCatalogoService ctgCatalogoService;
+
+    @Autowired
+    SgdUsuarioServiceWeb sgdUsuarioServiceWeb;
 
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,6 +74,30 @@ public class LoginController extends AbstractBaseController{
             responseEntity = generateErrorResponseWithCode(exception, exception.getMessage(), HttpStatus.OK, "10000");
         }
         return responseEntity;
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(){
+        ResponseEntity<?> response = null;
+        String resultado = null;
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication auth = context.getAuthentication();
+        logger.info("LoginController logout usuario: " + auth.getName());
+        try{
+            resultado = sgdUsuarioServiceWeb.actualizarSgdUsuarioLogueado(auth.getName(), 0);
+            if(resultado.equals("OK")){
+                SecurityContextHolder.clearContext();
+                response = generateSingleResponseWithCode(SUCCESS, resultado, HttpStatus.OK, "00000");
+            }else {
+                response = generateSingleResponseWithCode(resultado, null, HttpStatus.ACCEPTED, "00400");
+            }
+        }catch(PropertyReferenceException e){
+            e.printStackTrace();
+            return generateErrorResponseWithCode(e, this.getMessage("Propiedad no exisstente en modelo"), HttpStatus.BAD_REQUEST, "00002");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return response;
     }
  
     @RequestMapping("/accessDenied")
